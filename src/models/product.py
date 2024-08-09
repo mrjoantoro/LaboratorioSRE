@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, String, Date, Enum, TIMESTAMP, func
 from sqlalchemy.ext.declarative import declarative_base
+from pydantic import BaseModel
 import enum
 
 Base = declarative_base()
@@ -21,9 +22,15 @@ class LostProduct(Base):
     created_at = Column(TIMESTAMP, server_default=func.now())
     updated_at = Column(TIMESTAMP, server_default=func.now(), onupdate=func.now())
 
-class User(Base):
-    __tablename__ = 'users'
+class ProductCreate(BaseModel):
+    name: str
+    description: str
+    location: str
+    date_lost: str  
 
-    id = Column(Integer, primary_key=True, index=True)
-    username = Column(String, unique=True, index=True, nullable=False)
-    hashed_password = Column(String, nullable=False)
+class ProductUpdate(BaseModel):
+    name: str = None
+    description: str = None
+    location: str = None
+    date_lost: str = None
+    status: ProductStatus = None
